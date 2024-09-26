@@ -17,8 +17,8 @@ export default function Intro() {
           className='flex-1 rounded-lg'
           src={authorImage}
           alt='Christian Johnson'
-          width={178}
-          height={178}
+          width={175}
+          height={175}
           priority
         />
       </div>
