@@ -23,7 +23,7 @@ export default function Header() {
           </li>
           <li className='transition-colors hover:text-foreground'>
             <a
-              href='/images/resume/resume.png'
+              href='/images/resume/Christian_Johnson_Resume.pdf'
               download='Christian_Johnson_Resume.pdf'
               className='transition-colors hover:text-foreground'
             >
