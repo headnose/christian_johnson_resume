@@ -22,13 +22,13 @@ export default function Header() {
             <Link href='/contact'>Contact</Link>
           </li>
           <li className='transition-colors hover:text-foreground'>
-            <Link
+            <a
               href='/images/resume/resume.png'
-              target='_blank'
-              rel='noopener noreferrer'
+              download='Christian_Johnson_Resume.pdf'
+              className='transition-colors hover:text-foreground'
             >
-              Resume
-            </Link>
+              Download Resume
+            </a>
           </li>
         </ul>
 
