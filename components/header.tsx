@@ -21,7 +21,7 @@ export default function Header() {
           <li className='transition-colors hover:text-foreground'>
             <Link href='/contact'>Contact</Link>
           </li>
-          <li className='flex gap-4 transition-colors hover:text-foreground'>
+          <li className='flex gap-4'>
             {/* View Resume */}
             <a
               href='/images/resume/Christian_Johnson_Resume.pdf'
