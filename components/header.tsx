@@ -24,7 +24,7 @@ export default function Header() {
           <li className='flex gap-4'>
             {/* View Resume */}
             <a
-              href='/images/resume/Christian_Johnson_Resume.pdf'
+              href='/images/resume/christian_resume.pdf'
               target='_blank'
               rel='noopener noreferrer'
               className='transition-colors hover:text-foreground'
@@ -34,7 +34,7 @@ export default function Header() {
             {/* Download Resume */}
             <a
               href='/images/resume/Christian_Johnson_Resume.pdf'
-              download='Christian_Johnson_Resume.pdf'
+              download='christian_resume.pdf'
               className='transition-colors hover:text-foreground'
             >
               Download Resume
