@@ -33,7 +33,7 @@ export default function Header() {
             </a>
             {/* Download Resume */}
             <a
-              href='/images/resume/Christian_Johnson_Resume.pdf'
+              href='/images/resume/christian_resume.pdf'
               download='christian_resume.pdf'
               className='transition-colors hover:text-foreground'
             >
