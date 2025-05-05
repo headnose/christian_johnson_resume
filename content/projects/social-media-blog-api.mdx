@@ -1,0 +1,39 @@
+---
+title: Social Media Blog API
+publishedAt: '2025-04-05'
+tech: [Java, JDBC, REST, SQL]
+image: /images/projects/social-media-blog-api.png
+---
+
+## 📨 Social Media Blog API
+
+This is a backend-only micro-blogging API built in Java using raw JDBC and a 3-layer architecture (Controller, Service, DAO). It powers basic social media functionality including user registration, login, and message posting.
+
+### 🔧 Tech Stack
+- **Java**
+- **JDBC** (no Spring)
+- **SQL** (MySQL-style schema)
+- **HTTP REST API**
+
+### ✅ Features
+- `POST /register` – Register a new user  
+- `POST /login` – Login with username/password  
+- `POST /messages` – Create a new message  
+- `GET /messages` – View all messages  
+- `GET /messages/{message_id}` – View message by ID  
+- `DELETE /messages/{message_id}` – Delete a message  
+- `PATCH /messages/{message_id}` – Edit message content  
+- `GET /accounts/{account_id}/messages` – View all messages by a specific user
+
+### 🗂 Structure
+- **Controller** – Handles HTTP endpoints
+- **Service** – Business logic and validation
+- **DAO** – Raw SQL queries with JDBC
+- **Model** – Account and Message classes
+- **Database** – Auto-initialized with a provided SQL script
+
+### 🚫 No Frameworks
+This project was done without Spring or Hibernate to focus on mastering JDBC, SQL, and clean separation of logic layers.
+
+---
+

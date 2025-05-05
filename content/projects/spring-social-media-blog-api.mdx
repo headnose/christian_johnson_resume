@@ -1,0 +1,44 @@
+---
+title: Spring Social Media Blog API
+publishedAt: '2025-04-25'
+tech: [Java, Spring Boot, REST, SQL]
+image: /images/projects/spring-social-media-blog-api.png
+---
+
+## 🌱 Spring Social Media Blog API
+
+This is a backend-only micro-blogging API built in Java using the Spring framework. It follows a 3-layer architecture (Controller, Service, Repository) and provides core social media functionality including user registration, login, and message handling.
+
+### 🔧 Tech Stack
+- **Java**
+- **Spring Boot**
+- **Spring MVC + Spring Data JPA**
+- **SQL** (H2 or MySQL)
+- **HTTP REST API**
+
+### ✅ Features
+- `POST /register` – Register a new user  
+- `POST /login` – Login with username/password  
+- `POST /messages` – Create a new message  
+- `GET /messages` – View all messages  
+- `GET /messages/{messageId}` – View message by ID  
+- `DELETE /messages/{messageId}` – Delete a message  
+- `PATCH /messages/{messageId}` – Edit message content  
+- `GET /accounts/{accountId}/messages` – View all messages by a specific user
+
+### 🗂 Structure
+- **Controller** – Handles HTTP endpoints using `@RestController`
+- **Service** – Contains business logic with `@Service`
+- **Repository** – Interfaces extending `JpaRepository`
+- **Model** – Entity classes for Account and Message
+- **Database** – Auto-configured and initialized via Spring with SQL schema
+
+### ✅ Spring Features Used
+- Dependency injection with `@Autowired`
+- RESTful routing via Spring MVC
+- Automatic DB handling with Spring Data JPA
+- Exception handling and validation
+
+---
+
+Let me know if you'd like a version that downplays Spring or emphasizes testing!
