@@ -1,0 +1,37 @@
+---
+title: Story Maker
+publishedAt: '2025-05-27'
+tech: [HTML, CSS, JavaScript, DOM, Forms]
+image: /images/projects/story-maker.png
+---
+
+## ✏️ Story Maker
+
+A Mad Libs-style web app built with vanilla HTML, CSS, and JavaScript. Users fill out a form with various types of input, and a dynamically generated story is displayed using their responses.
+
+### 🔧 Tech Stack
+- **HTML** – Semantic layout and form structure
+- **CSS** – Custom styling and layout
+- **JavaScript** – DOM manipulation and URL parameter parsing
+- **Forms** – Input types including text, number, radio, select, and textarea
+
+### ✅ Features
+- `index.html` – Main form where users input words and values  
+- `story.html` – Final story output generated from the input values  
+- Dynamic DOM injection of HTML with template strings  
+- Text cleaning and capitalization via a utility function  
+- Conditional content handling based on user selections  
+- Fully client-side – no backend required
+
+### 💡 Logic Overview
+
+JavaScript uses `URLSearchParams` to extract form data from the URL:
+
+```js
+const words = new URLSearchParams(window.location.search);
+
+function cleanAndCap(str) {
+  if (!str) return null;
+  const temp = str.trim();
+  return temp[0].toUpperCase() + temp.substring(1);
+}

@@ -17,7 +17,7 @@ export default async function RecentProjects() {
         >
           <span>All projects</span>
         </Link>
-      </div>
+      </div>  
     </section>
-  )
+  ) 
 }
