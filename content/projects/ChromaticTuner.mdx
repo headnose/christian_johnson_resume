@@ -1,0 +1,101 @@
+---
+title: Chromatic Tuner iOS App
+summary: A professional-grade chromatic tuner app built with SwiftUI that provides real-time pitch detection and visual tuning feedback for musicians. Features studio-quality accuracy with an intuitive, modern interface.
+image: /images/projects/chromatic-tuner.png
+author: 'Christian Johnson'
+publishedAt: '2025-07-25'
+---
+
+**Chromatic Tuner** is a professional-grade iOS tuner application that delivers real-time pitch detection with studio-quality accuracy. Built entirely in SwiftUI with modern iOS development practices, the app provides musicians with precise tuning feedback through an intuitive, visually appealing interface.
+
+## Demo
+
+*App Store deployment planned for 2025*
+
+## Features
+
+- **Real-time Pitch Detection**: ±1 cent accuracy using advanced audio processing
+- **Chromatic Note Recognition**: Automatic detection across full chromatic scale with octave display
+- **Visual Tuning Meter**: Custom-built cents meter with color-coded accuracy zones
+- **Configurable Update Rates**: Adjustable detection frequency (1x to 3x speed)
+- **Universal Instrument Support**: Works with guitar, violin, piano, brass, woodwinds, and more
+- **Modern SwiftUI Interface**: Smooth animations and responsive design
+- **Offline Functionality**: No internet connection required
+
+## Technologies Used
+
+- **Swift 5.9** / **SwiftUI**
+- **AVFoundation** (Audio session management)
+- **Combine Framework** (Reactive programming)
+- **Tuna Library** (Pitch detection engine)
+- **MVVM Architecture**
+- **iOS 15.0+**
+
+## Technical Highlights
+
+### Architecture
+- Clean MVVM pattern with reactive data binding
+- Protocol-oriented design for testability
+- Modular component structure ready for App Store deployment
+
+### Audio Processing
+```swift
+// Configured AVAudioSession for optimal microphone input
+try audioSession.setCategory(.record, mode: .measurement, options: [])
+
+// Real-time pitch detection with delegate pattern
+func pitchEngine(_ engine: PitchEngine, didReceive result: Result<Pitch, Error>)
+```
+
+### Music Theory Implementation
+- Equal temperament calculations using A4=440Hz standard
+- Logarithmic frequency-to-pitch conversion algorithms
+- Precise cents deviation measurement (100 cents = 1 semitone)
+
+### SwiftUI Components
+- Custom `CentsMeterView` with geometric calculations
+- Responsive layouts using `GeometryReader`
+- `@Published` properties for automatic UI updates
+
+## Installation
+
+To set up the project locally, follow these steps:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/chromatic-tuner.git
+   ```
+
+2. Open in Xcode:
+   ```bash
+   cd chromatic-tuner
+   open ChromaticTuner.xcodeproj
+   ```
+
+3. Install dependencies:
+   - Add Tuna library via Swift Package Manager
+   - Build and run on iOS device (microphone access required)
+
+## Key Challenges Solved
+
+- **Cross-platform compatibility**: Simulator fallback for testing without microphone
+- **Audio session management**: Proper lifecycle handling and permission requests  
+- **Mathematical precision**: Implemented equal temperament tuning calculations
+- **Performance optimization**: Efficient timer management for battery life
+
+## Code Quality
+
+- Comprehensive error handling with `Result<Success, Error>` patterns
+- Memory safety using `[weak self]` to prevent retain cycles
+- Clean separation of concerns with single-responsibility components
+- Extensive inline documentation and architectural comments
+
+## Future Enhancements
+
+- Instrument-specific presets (guitar, bass, violin tunings)
+- Alternate temperament support (baroque, world music scales)
+- Strobe tuner and analog needle display modes
+- Settings panel for reference pitch customization
+- App Store deployment with premium features
+
+---
