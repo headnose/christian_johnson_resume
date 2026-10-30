@@ -1,0 +1,38 @@
+---
+title: Employee Onboarding Portal
+summary: A team-built HR onboarding system of 12 microservices, where I owned the Housing Service for house management and facility maintenance reports.
+image: /images/projects/employee-onboarding-portal.png
+author: 'Christian Johnson'
+publishedAt: '2026-03-26'
+---
+
+**Employee Onboarding Portal** is an HR system built by a team of five during the BeaconFire Java training program. New hires register, complete onboarding forms, upload documents, and track visa status, while HR reviews applications and manages company housing. The system runs as 12 repositories behind an API gateway.
+
+**My role:** I owned the **Housing Service** and helped teammates debug and test their services.
+
+## The Housing Service
+
+- **House management for HR:** REST endpoints to create, update, and delete houses along with landlord and facility data
+- **Employee housing view:** employees see their assigned house and housemates. This calls the Employee Service to resolve house assignments across services.
+- **Facility maintenance reports:** employees file reports on house facilities, track status (Open → In Progress → Closed), and exchange comments with HR
+- **Report lists** sorted by date and paginated
+- **Separate HR and employee endpoints**, secured by role
+
+## System Architecture
+
+- **Eureka** service discovery
+- **API Gateway** that validates JWTs before routing requests
+- **Config Server** for centralized configuration
+- **MySQL** for housing and application data, **MongoDB** for employee profiles
+- **AWS S3** for document storage
+- Shared **Postman** collections for testing endpoints across the team
+
+## Technologies Used
+
+- **Java**, **Spring Boot**, **Spring Cloud**
+- **MySQL**, **MongoDB**, **AWS S3**
+- **JWT**, **Postman**
+
+## What I Learned
+
+Owning one service inside a larger system meant agreeing on API contracts with teammates before writing code, then testing my endpoints against theirs as the pieces came together.

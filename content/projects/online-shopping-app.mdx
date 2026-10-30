@@ -1,0 +1,34 @@
+---
+title: Online Shopping App
+summary: A solo-built e-commerce backend with two Spring Boot microservices, JWT authentication, role-based access, and inventory-safe ordering.
+image: /images/projects/online-shopping-app.png
+author: 'Christian Johnson'
+publishedAt: '2026-03-01'
+---
+
+**Online Shopping App** is an e-commerce backend I built solo during the BeaconFire Java training program. It's split into two Spring Boot services: an **auth service** that registers users and issues JWTs, and a **shop service** that handles products, orders, and watchlists. Each service has its own MySQL database.
+
+[View the code on GitHub](https://github.com/headnose/Online-Shopping-App)
+
+## Features
+
+- **Authentication:** registration and login with BCrypt-hashed passwords; the auth service signs a JWT with the user's id, username, and role
+- **Stateless authorization:** the shop service validates tokens itself, so it never calls the auth service on each request
+- **Role-based access:** admin-only endpoints under `/admin/**`, user endpoints under `/user/**`
+- **Inventory-safe ordering:** stock is checked and deducted in one transaction, and restored when an order is canceled
+- **Order lifecycle:** Processing → Completed or Canceled, with rules on who can do what
+- **Admin analytics:** top products by units sold and by profit, from completed orders
+- **Watchlists and purchase history** for users
+
+## Technologies Used
+
+- **Java 8**, **Spring Boot 2.7**
+- **Spring Security** with **JWT**
+- **Hibernate** with **MySQL**
+- **Spring AOP** for service-layer logging
+- **Bean Validation** and a global exception handler
+- **Maven**, **Lombok**
+
+## What I Learned
+
+Splitting a single app into two services forced me to think about where each piece of data lives and how services trust each other. Putting the user's id and role in the token let the shop service work on its own without a call back to the auth service on every request.

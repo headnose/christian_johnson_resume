@@ -16,7 +16,8 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: 'Christian Johnson',
-  description: 'portfolio'
+  description:
+    'Java full-stack developer: Spring Boot, microservices, SQL, and iOS apps.'
 }
 
 export default function RootLayout({
