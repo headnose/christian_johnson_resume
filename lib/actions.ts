@@ -20,9 +20,11 @@ export async function sendEmail(data: ContactFormInputs) {
     const { name, email, message } = result.data
     const { data, error } = await resend.emails.send({
       from: 'onboarding@resend.dev',
-      to: [email],
-      cc: ['headnose6@gmail.com'],
-      subject: 'Contact form submission',
+      // Resend's test sender can only deliver to the account owner, so send
+      // to Christian and let replies go straight to the visitor.
+      to: ['headnose6@gmail.com'],
+      reply_to: email,
+      subject: `Portfolio contact from ${name}`,
       text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
       react: ContactFormEmail({ name, email, message })
     })
