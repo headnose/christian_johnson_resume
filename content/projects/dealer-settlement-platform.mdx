@@ -1,0 +1,44 @@
+---
+title: Dealer Settlement Platform
+summary: An in-progress personal project with Spring Boot 4 microservices that model dealer loan settlement, starting with concurrent loan import into MongoDB.
+image: /images/projects/dealer-settlement-platform.png
+author: 'Christian Johnson'
+publishedAt: '2026-11-07'
+---
+
+**Dealer Settlement Platform** is a personal learning project I'm building on my own after the BeaconFire training program. It models what happens after an auto loan closes: importing the loan, calculating what's owed to the dealer, generating a wire statement, and emailing it to the dealer and the dealer's bank. I'm using it to practice the parts of backend work my training didn't cover, like concurrency, Kafka, Redis, and resilience patterns.
+
+**Status:** in progress. This page only describes what's built and tested so far.
+
+[View the code on GitHub](https://github.com/headnose/dealer-settlement-platform)
+
+## What's built
+
+- **Four Spring Boot services in one multi-module Maven project**: loan-service, settlement-service, wire-service, and notification-service
+- **Docker Compose** that starts MySQL, MongoDB, Redis, Kafka, and Mailpit (a local mail server) with one command
+- **loan-service**: a mock upstream system that returns sample closed loans by ID, with 404 for unknown loans
+- **Concurrent loan import**: `POST /api/v1/imports` takes a list of loan IDs and fetches each loan from loan-service in parallel using `CompletableFuture` on a dedicated, bounded thread pool
+- **A result for every loan**: each loan comes back as Imported, Already imported, Not found, Not closed, or Failed, so one bad loan doesn't fail the whole batch
+- **Idempotent re-import**: importing the same loan twice doesn't create a duplicate
+- **MongoDB document model**: one document per loan, with money stored as `Decimal128`, optimistic locking with `@Version`, and automatic audit timestamps
+
+## Technologies Used
+
+- **Java 17**, **Spring Boot 4**, **Maven** (multi-module)
+- **Spring Data MongoDB**, **RestClient**, **Bean Validation**
+- **CompletableFuture** with a `ThreadPoolTaskExecutor`
+- **Docker Compose**
+- **JUnit 5**, **Mockito**, `@WebMvcTest` and `@DataMongoTest` slice tests
+
+## What's next
+
+- Settlement calculation with `BigDecimal` and adjustments
+- wire-service with MySQL and Flyway migrations
+- Kafka topics for email delivery and delivery status, with dead-letter topics
+- notification-service sending email through Mailpit, with Redis idempotency keys
+- Redis caching and a Resilience4j circuit breaker around the loan-service call
+- Load testing wire generation with sequential calls, then parallel calls, and comparing the results
+
+## What I've Learned So Far
+
+Running independent network calls in parallel is easy to start and harder to get right. I learned how a thread pool actually grows (core threads first, then the queue, and only then extra threads), why each loan needs its own error handling so a single failure doesn't sink the batch, and why money belongs in `BigDecimal` and `Decimal128` instead of `double`. Looking at the stored documents also showed me a real bug to fix next: dates are saved as midnight in the server's timezone, which can shift by a day on a server in a different timezone.
