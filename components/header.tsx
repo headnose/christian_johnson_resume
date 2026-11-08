@@ -18,23 +18,13 @@ export default function Header() {
           <li className='transition-colors hover:text-foreground'>
             <Link href='/contact'>Contact</Link>
           </li>
-          <li className='flex gap-4'>
-            {/* View Resume */}
+          <li className='transition-colors hover:text-foreground'>
             <a
               href='/images/resume/christian_resume.pdf'
               target='_blank'
               rel='noopener noreferrer'
-              className='transition-colors hover:text-foreground'
             >
-              View Resume
-            </a>
-            {/* Download Resume */}
-            <a
-              href='/images/resume/christian_resume.pdf'
-              download='christian_resume.pdf'
-              className='transition-colors hover:text-foreground'
-            >
-              Download Resume
+              Resume
             </a>
           </li>
         </ul>
