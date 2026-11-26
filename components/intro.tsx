@@ -8,11 +8,13 @@ export default function Intro() {
         <h1 className='title no-underline'>Hi, I&#39;m Christian.</h1>
         <p className='mt-3 font-light text-muted-foreground'>
           I&#39;m a Java full-stack developer near Asheville, North Carolina,
-          working with Spring Boot, microservices, and SQL. I&#39;ve built two
-          microservice systems and shipped two iOS apps to the App Store, and
-          I&#39;m currently building a loan settlement platform with Kafka,
-          Redis, MongoDB, MySQL, and Docker.
-          Before software, I spent six years in production labs (kombucha
+          working with Spring Boot, microservices, and SQL. Right now I&#39;m
+          building a loan settlement platform: four Spring Boot microservices
+          with Kafka, Redis, MongoDB, MySQL, and Docker, load-tested with k6
+          and monitored with Prometheus, Grafana, and ELK. Before that, I
+          built two microservice apps in Beaconfire&#39;s training program and
+          shipped two iOS apps to the App Store.
+          Earlier, I spent six years in production labs (kombucha
           quality testing and mycology), which is where I learned to care
           about testing, documentation, and getting the details right.
         </p>
