@@ -10,10 +10,11 @@ export default function Intro() {
           I&#39;m a Java full-stack developer near Asheville, North Carolina,
           working with Spring Boot, microservices, and SQL. I&#39;ve built two
           microservice systems and shipped two iOS apps to the App Store, and
-          I&#39;m currently building a loan settlement platform with MongoDB,
-          concurrent processing, and Docker.
-          Before software, I spent years in lab QA, which is where I learned
-          to care about testing, documentation, and getting the details right.
+          I&#39;m currently building a loan settlement platform with Kafka,
+          Redis, MongoDB, MySQL, and Docker.
+          Before software, I spent six years in production labs (kombucha
+          quality testing and mycology), which is where I learned to care
+          about testing, documentation, and getting the details right.
         </p>
         <p className='mt-3 font-light text-muted-foreground'>
           Open to backend and full-stack roles, remote or on-site.
