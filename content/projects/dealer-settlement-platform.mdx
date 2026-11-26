@@ -1,44 +1,54 @@
 ---
 title: Dealer Settlement Platform
-summary: An in-progress personal project with Spring Boot 4 microservices that model dealer loan settlement, starting with concurrent loan import into MongoDB.
+summary: An in-progress personal project with four Spring Boot 4 microservices that model dealer loan settlement, from concurrent loan import to wires sent over Kafka, with load testing, circuit breakers, and full observability.
 image: /images/projects/dealer-settlement-platform.png
 author: 'Christian Johnson'
-publishedAt: '2026-11-07'
+publishedAt: '2026-11-26'
 ---
 
-**Dealer Settlement Platform** is a personal learning project I'm building on my own after the BeaconFire training program. It models what happens after an auto loan closes: importing the loan, calculating what's owed to the dealer, generating a wire statement, and emailing it to the dealer and the dealer's bank. I'm using it to practice the parts of backend work my training didn't cover, like concurrency, Kafka, Redis, and resilience patterns.
+**Dealer Settlement Platform** is a personal learning project I'm building on my own after the BeaconFire training program. It models what happens after an auto loan closes: importing the loan, calculating what's owed to the dealer, generating a wire statement, and emailing it to the dealer and the dealer's bank. I'm using it to practice the parts of backend work my training didn't cover, like concurrency, Kafka, Redis, resilience patterns, security, and observability.
 
-**Status:** in progress. This page only describes what's built and tested so far.
+**Status:** in progress. This page only describes what's built and tested.
 
 [View the code on GitHub](https://github.com/headnose/dealer-settlement-platform)
 
 ## What's built
 
-- **Four Spring Boot services in one multi-module Maven project**: loan-service, settlement-service, wire-service, and notification-service
-- **Docker Compose** that starts MySQL, MongoDB, Redis, Kafka, and Mailpit (a local mail server) with one command
-- **loan-service**: a mock upstream system that returns sample closed loans by ID, with 404 for unknown loans
-- **Concurrent loan import**: `POST /api/v1/imports` takes a list of loan IDs and fetches each loan from loan-service in parallel using `CompletableFuture` on a dedicated, bounded thread pool
-- **A result for every loan**: each loan comes back as Imported, Already imported, Not found, Not closed, or Failed, so one bad loan doesn't fail the whole batch
-- **Idempotent re-import**: importing the same loan twice doesn't create a duplicate
-- **MongoDB document model**: one document per loan, with money stored as `Decimal128`, optimistic locking with `@Version`, and automatic audit timestamps
+- **Four Spring Boot services** in one multi-module Maven project: loan-service (a mock upstream), settlement-service (MongoDB), wire-service (MySQL), and notification-service
+- **Concurrent loan import** with `CompletableFuture` on a bounded thread pool. Every loan gets its own result (Imported, Already imported, Not found, Not closed, or Failed), and re-imports never create duplicates
+- **Settlement calculation** with `BigDecimal` money and adjustments, stored as one MongoDB document per loan with `Decimal128`, optimistic locking, and audit timestamps
+- **Redis cache-aside** for settlement details
+- **Wire generation and sending**: wire-service stores statements in S3 (SeaweedFS), publishes email requests to Kafka with `acks=all`, idempotent producers, and `min.insync.replicas`, and tracks delivery status
+- **Email delivery** in notification-service with per-recipient idempotency keys in Redis (`SET NX`), so each recipient gets one email even if a message is delivered twice
+- **Dead-letter topics and a delayed redrive job** that retries only recoverable failures, up to three times
+- **Security**: role-based access (maker-checker) with Spring Security, user identity from a load balancer's signed claims header, and OAuth2 client credentials through Keycloak between services
+- **Resilience4j circuit breakers** and timeouts on service calls, with logging when a breaker opens or closes
+- **Observability**: Prometheus metrics and a Grafana dashboard, OpenTelemetry tracing in Jaeger, structured JSON logs, and an ELK stack where one search by loan ID finds the whole flow
+- **Docker**: each service builds into a multi-stage, non-root image, and GitHub Actions builds and tests every pull request
+- **A basic web UI** (nginx and one HTML page) for importing loans, calculating settlements, and generating and sending wires
+
+## Load testing
+
+I load-tested the platform with **k6** and used **Toxiproxy** to slow down or cut off S3 and Kafka. Before each run I wrote down what I expected, then compared it with what I measured. A few things I found:
+
+- The real failure times didn't match the configured timeouts. The AWS SDK's retry limit cut retries short, and Kafka's `max.block.ms` decided when a send failed
+- A send reported as failed could still publish its Kafka events, leaving the wire in Draft while the email went out. The fix is the outbox pattern, which is next on the list
+- Starting the settlement-service call earlier and batching database inserts made wire generation measurably faster
 
 ## Technologies Used
 
 - **Java 17**, **Spring Boot 4**, **Maven** (multi-module)
-- **Spring Data MongoDB**, **RestClient**, **Bean Validation**
-- **CompletableFuture** with a `ThreadPoolTaskExecutor`
-- **Docker Compose**
-- **JUnit 5**, **Mockito**, `@WebMvcTest` and `@DataMongoTest` slice tests
+- **MongoDB**, **MySQL** with **Flyway**, **Redis**, **Kafka**, **S3** (SeaweedFS)
+- **Spring Security**, **OAuth2**, **Keycloak**, **Resilience4j**
+- **Prometheus**, **Grafana**, **OpenTelemetry**, **Jaeger**, **Elasticsearch**, **Filebeat**, **Kibana**
+- **Docker**, **Docker Compose**, **GitHub Actions**
+- **JUnit**, **Mockito**, **Testcontainers**, **k6**, **Toxiproxy**
 
 ## What's next
 
-- Settlement calculation with `BigDecimal` and adjustments
-- wire-service with MySQL and Flyway migrations
-- Kafka topics for email delivery and delivery status, with dead-letter topics
-- notification-service sending email through Mailpit, with Redis idempotency keys
-- Redis caching and a Resilience4j circuit breaker around the loan-service call
-- Load testing wire generation with sequential calls, then parallel calls, and comparing the results
+- An outbox table so a wire's status and its Kafka events always agree
+- Deploying to AWS
 
-## What I've Learned So Far
+## What I've Learned
 
-Running independent network calls in parallel is easy to start and harder to get right. I learned how a thread pool actually grows (core threads first, then the queue, and only then extra threads), why each loan needs its own error handling so a single failure doesn't sink the batch, and why money belongs in `BigDecimal` and `Decimal128` instead of `double`. Looking at the stored documents also showed me a real bug to fix next: dates are saved as midnight in the server's timezone, which can shift by a day on a server in a different timezone.
+Most of what I learned came from measuring instead of guessing. Running network calls in parallel is easy to start and harder to get right: I learned how a thread pool really grows, why each loan needs its own error handling, and why money belongs in `BigDecimal`. Load testing taught me that the timeout in a config file isn't always the timeout you get, and that "the request failed" doesn't mean nothing happened. That's the kind of gap that only shows up when you break things on purpose.
